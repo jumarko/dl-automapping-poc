@@ -15,11 +15,11 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class IdDdlGenerationStrategyTest {
+public class TitleDdlGenerationStrategyTest {
 
     private final ObjectMapper objectMapper = new JsonObjectMapper();
 
-    private DdlGenerationStrategy idStrategy = new IdDdlGenerationStrategy();
+    private DdlGenerationStrategy idStrategy = new TitleDdlGenerationStrategy();
 
     @Test
     public void ddlForEmptyModelShouldBeEmpty() {
@@ -29,74 +29,72 @@ public class IdDdlGenerationStrategyTest {
     @Test
     public void generateDdlForDatasetWithOneFact() {
         checkGeneratedDdl("person-fact.json",
-                "CREATE TABLE dataset__person(\n" +
-                "  fact__person__age NUMERIC(10,2)\n" +
+                "CREATE TABLE person(\n" +
+                "  age NUMERIC(10,2)\n" +
                 ");\n");
     }
 
     @Test
     public void generateDdlForDatasetWithOneFactAndAttribute() {
         checkGeneratedDdl("person-fact-attribute.json",
-                "CREATE TABLE dataset__person(\n" +
-                "  fact__person__age NUMERIC(10,2),\n" +
-                "  label__person__name VARCHAR(128)\n" +
+                "CREATE TABLE person(\n" +
+                "  age NUMERIC(10,2),\n" +
+                "  name VARCHAR(128)\n" +
                 ");\n");
     }
 
     @Test
     public void generateDdlForDatasetWithOneFactAndAttributeWithMultipleLabels() {
         checkGeneratedDdl("person-fact-attribute-labels.json",
-                "CREATE TABLE dataset__person(\n" +
-                "  fact__person__age NUMERIC(10,2),\n" +
-                "  label__person__pid__name VARCHAR(128),\n" +
-                "  label__person__pid__lastname VARCHAR(128),\n" +
-                        // TODO: it would be nice to have default label generated first but for this POC it doesn't
-                        // matter
-                "  label__person__pid VARCHAR(128)\n" +
+                "CREATE TABLE person(\n" +
+                "  age NUMERIC(10,2),\n" +
+                "  pid__name VARCHAR(128),\n" +
+                "  pid__lastname VARCHAR(128),\n" +
+                "  pid VARCHAR(128)\n" +
                 ");\n");
     }
 
     @Test
     public void generateDdlForDatasetWithConnectionPoint() {
         checkGeneratedDdl("person-connection-point.json",
-                "CREATE TABLE dataset__person(\n" +
-                "  fact__person__age NUMERIC(10,2),\n" +
-                "  label__person__pid__name VARCHAR(128),\n" +
-                "  label__person__pid__lastname VARCHAR(128),\n" +
-                "  label__person__pid VARCHAR(128)\n" +
+                "CREATE TABLE person(\n" +
+                "  age NUMERIC(10,2),\n" +
+                "  pid__name VARCHAR(128),\n" +
+                "  pid__lastname VARCHAR(128),\n" +
+                "  pid VARCHAR(128)\n" +
                 ");\n");
     }
 
     @Test
     public void generateDdlForTwoDisconnectedDatasets() {
         checkGeneratedDdl("person-car-disconnected.json",
-                "CREATE TABLE dataset__person(\n" +
-                "  fact__person__age NUMERIC(10,2),\n" +
-                "  label__person__pid__name VARCHAR(128),\n" +
-                "  label__person__pid__lastname VARCHAR(128),\n" +
-                "  label__person__pid VARCHAR(128)\n" +
+                "CREATE TABLE person(\n" +
+                "  age NUMERIC(10,2),\n" +
+                "  pid__name VARCHAR(128),\n" +
+                "  pid__lastname VARCHAR(128),\n" +
+                "  pid VARCHAR(128)\n" +
                 ");\n" +
-                "CREATE TABLE dataset__car(\n" +
-                "  fact__car__velocity NUMERIC(10,2),\n" +
-                "  label__car__brand__name VARCHAR(128),\n" +
-                "  label__car__brand VARCHAR(128)\n" +
+                "CREATE TABLE car(\n" +
+                "  velocity NUMERIC(10,2),\n" +
+                "  brand__name VARCHAR(128),\n" +
+                "  brand VARCHAR(128)\n" +
                 ");\n");
     }
 
     @Test
     public void generateDdlForTwoConnectedDatasets() {
         checkGeneratedDdl("person-car-connected.json",
-                "CREATE TABLE dataset__person(\n" +
-                "  fact__person__age NUMERIC(10,2),\n" +
-                "  label__person__pid__name VARCHAR(128),\n" +
-                "  label__person__pid__lastname VARCHAR(128),\n" +
-                "  label__person__pid VARCHAR(128)\n" +
+                "CREATE TABLE person(\n" +
+                "  age NUMERIC(10,2),\n" +
+                "  pid__name VARCHAR(128),\n" +
+                "  pid__lastname VARCHAR(128),\n" +
+                "  pid VARCHAR(128)\n" +
                 ");\n" +
-                "CREATE TABLE dataset__car(\n" +
-                "  fact__car__velocity NUMERIC(10,2),\n" +
-                "  label__car__brand__name VARCHAR(128),\n" +
-                "  label__car__brand VARCHAR(128),\n" +
-                "  ref__dataset__person VARCHAR(128)\n" +
+                "CREATE TABLE car(\n" +
+                "  velocity NUMERIC(10,2),\n" +
+                "  brand__name VARCHAR(128),\n" +
+                "  brand VARCHAR(128),\n" +
+                "  dataset__person VARCHAR(128)\n" +
                 ");\n");
     }
 
@@ -104,7 +102,7 @@ public class IdDdlGenerationStrategyTest {
     public void goodSalesProjectModel() throws IOException {
         final String goodSalesDdl = idStrategy.generateDdl(readModel("goodsales.json"));
         System.out.println(goodSalesDdl);
-        assertThat(goodSalesDdl, is(IOUtils.toString(readResource("goodsales_id_strategy.sql"))));
+        assertThat(goodSalesDdl, is(IOUtils.toString(readResource("goodsales_title_strategy.sql"))));
     }
 
 
