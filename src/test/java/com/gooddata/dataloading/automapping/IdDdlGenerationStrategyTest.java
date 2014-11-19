@@ -62,7 +62,7 @@ public class IdDdlGenerationStrategyTest {
                 "  fact__person__age NUMERIC(10,2),\n" +
                 "  label__person__pid__name VARCHAR(128),\n" +
                 "  label__person__pid__lastname VARCHAR(128),\n" +
-                "  label__person__pid VARCHAR(128) PRIMARY KEY\n" +
+                "  label__person__pid VARCHAR(128)\n" +
                 ");\n");
     }
 
@@ -73,7 +73,7 @@ public class IdDdlGenerationStrategyTest {
                 "  fact__person__age NUMERIC(10,2),\n" +
                 "  label__person__pid__name VARCHAR(128),\n" +
                 "  label__person__pid__lastname VARCHAR(128),\n" +
-                "  label__person__pid VARCHAR(128) PRIMARY KEY\n" +
+                "  label__person__pid VARCHAR(128)\n" +
                 ");\n" +
                 "CREATE TABLE dataset__car(\n" +
                 "  fact__car__velocity NUMERIC(10,2),\n" +
@@ -89,7 +89,7 @@ public class IdDdlGenerationStrategyTest {
                 "  fact__person__age NUMERIC(10,2),\n" +
                 "  label__person__pid__name VARCHAR(128),\n" +
                 "  label__person__pid__lastname VARCHAR(128),\n" +
-                "  label__person__pid VARCHAR(128) PRIMARY KEY\n" +
+                "  label__person__pid VARCHAR(128)\n" +
                 ");\n" +
                 "CREATE TABLE dataset__car(\n" +
                 "  fact__car__velocity NUMERIC(10,2),\n" +

@@ -1,7 +1,6 @@
 package com.gooddata.dataloading.automapping;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
-import static org.apache.commons.lang.Validate.notEmpty;
 import static org.apache.commons.lang.Validate.notNull;
 
 import com.gooddata.service.model.project.model.PmAttribute;
@@ -52,7 +51,6 @@ public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
                 ddlBuilder.append("  ")
                         .append(subsituteChars(anchorLabel.getIdentifier()))
                         .append(" VARCHAR(128)")
-                        .append(isReferenceKey(anchorLabel) ? " PRIMARY KEY" : "")
                         .append(',')
                         .append('\n');
             }
@@ -104,23 +102,6 @@ public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
             final int lastCommaIndex = ddlBuilder.length() - 2;
             ddlBuilder.deleteCharAt(lastCommaIndex);
         }
-    }
-
-    /**
-     * Simple heuristic to find out, if the LDM field is a reference key. Currently it works
-     * only if the "dot" naming convention is used. LDM field is considered as reference key
-     * if its name starts with 'label' and consists of three names separated by dots,
-     * eg. "label.opportunity.name".
-     *
-     * @param ldmField LDM field
-     * @return whether LDM field is a reference key
-     */
-    private static boolean isReferenceKey(final PmLabel ldmField) {
-        notNull(ldmField, "ldmField cannot be null!");
-        final String ldmFieldId = ldmField.getIdentifier();
-        notEmpty(ldmFieldId, "ldmField cannot be empty");
-        // return true for ldm fields starting with 'label' and having 3 sections separated by dots
-        return ldmFieldId.startsWith("label") && ldmFieldId.split("\\.").length == 3;
     }
 
 }
