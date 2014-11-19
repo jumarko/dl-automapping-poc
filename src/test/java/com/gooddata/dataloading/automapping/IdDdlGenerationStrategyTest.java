@@ -1,7 +1,6 @@
 package com.gooddata.dataloading.automapping;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -27,29 +26,39 @@ public class IdDdlGenerationStrategyTest {
     }
 
     @Test
-    public void generateDdlForSimpleDatasetWithOneFactAndAttribute() throws IOException {
-
-        final String personDdl = idStrategy.generateDdl(readModel("person_model.json"));
-
-        assertThat(personDdl, not(isEmptyString()));
-        assertThat(personDdl, is(
+    public void generateDdlForDatasetWithOneFact() throws IOException {
+        checkGeneratedDdl("person_fact.json",
                 "CREATE TABLE dataset.person(\n" +
-                        "  fact_person_age NUMERIC(10,2),\n" +
-                        "  label_person_name VARCHAR(128)\n" +
-                        ");"
-        ));
+                "  fact_person_age NUMERIC(10,2)\n" +
+                ");");
+    }
+
+    @Test
+    public void generateDdlForDatasetWithOneFactAndAttribute() throws IOException {
+        checkGeneratedDdl("person_fact_attribute.json",
+                "CREATE TABLE dataset.person(\n" +
+                "  fact_person_age NUMERIC(10,2),\n" +
+                "  label_person_name VARCHAR(128)\n" +
+                ");");
     }
 
 
 
     @Test
     public void goodSalesProjectModel() throws IOException {
-        idStrategy.generateDdl(readModel("goodsales_model.json"));
+        idStrategy.generateDdl(readModel("goodsales.json"));
         // TODO:
     }
 
 
     //--------------------------------------------------- HELPER METHODS -----------------------------------------------
+
+    private void checkGeneratedDdl(String modelJsonPath, String expectedDdl) {
+        final String personDdl = idStrategy.generateDdl(readModel(modelJsonPath));
+        assertThat(personDdl, is(
+                expectedDdl
+        ));
+    }
 
     private ProjectModel readModel(String modelJsonPath) {
         final InputStream jsonStream = getClass().getClassLoader().getResourceAsStream(modelJsonPath);

@@ -1,0 +1,29 @@
+{
+  "projectModelView" : {
+    "model" : {
+      "projectModel" : {
+        "datasets" : [ {
+          "dataset" : {
+            "identifier" : "dataset.person",
+            "title" : "Person",
+            "anchor" : {
+              "attribute" : {
+                "identifier" : "attr.person.factsof",
+                "title" : "Records of Person",
+                "folder" : "Person"
+              }
+            },
+            "facts" : [ {
+              "fact" : {
+                "identifier" : "fact.person.age",
+                "title" : "age",
+                "folder" : "Person",
+                "dataType" : "DECIMAL(12,2)"
+              }
+            } ]
+          }
+        } ]
+      }
+    }
+  }
+}
