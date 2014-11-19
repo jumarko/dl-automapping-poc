@@ -55,6 +55,17 @@ public class IdDdlGenerationStrategyTest {
                 ");");
     }
 
+    @Test
+    public void generateDdlForDatasetWithConnectionPoint() {
+        checkGeneratedDdl("person_connection_point.json",
+                "CREATE TABLE dataset.person(\n" +
+                "  fact_person_age NUMERIC(10,2),\n" +
+                "  label_person_pid_name VARCHAR(128),\n" +
+                "  label_person_pid_lastname VARCHAR(128),\n" +
+                "  label_person_pid VARCHAR(128) PRIMARY KEY\n" +
+                ");");
+    }
+
 
 
     @Test

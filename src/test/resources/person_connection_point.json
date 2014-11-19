@@ -1,0 +1,58 @@
+{
+  "projectModelView" : {
+    "model" : {
+      "projectModel" : {
+        "datasets" : [ {
+          "dataset" : {
+            "identifier" : "dataset.person",
+            "title" : "Person",
+            "anchor" : {
+              "attribute" : {
+                "identifier" : "attr.person.pid",
+                "title" : "PID",
+                "folder" : "Person",
+                "labels" : [ {
+                  "label" : {
+                    "identifier" : "label.person.pid.name",
+                    "title" : "name",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                }, {
+                  "label" : {
+                    "identifier" : "label.person.pid.lastname",
+                    "title" : "lastname",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                }, {
+                  "label" : {
+                    "identifier" : "label.person.pid",
+                    "title" : "PID",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                } ],
+                "defaultLabel" : "label.person.pid.name",
+                "sortOrder" : {
+                  "attributeSortOrder" : {
+                    "label" : "label.person.pid.name",
+                    "direction" : "ASC"
+                  }
+                }
+              }
+            },
+            "facts" : [ {
+              "fact" : {
+                "identifier" : "fact.person.age",
+                "title" : "age",
+                "folder" : "Person",
+                "dataType" : "DECIMAL(12,2)"
+              }
+            } ]
+          }
+        } ]
+      }
+    }
+  }
+}
