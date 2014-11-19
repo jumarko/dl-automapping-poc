@@ -30,7 +30,7 @@ public class IdDdlGenerationStrategyTest {
         checkGeneratedDdl("person_fact.json",
                 "CREATE TABLE dataset.person(\n" +
                 "  fact_person_age NUMERIC(10,2)\n" +
-                ");");
+                ");\n");
     }
 
     @Test
@@ -39,7 +39,7 @@ public class IdDdlGenerationStrategyTest {
                 "CREATE TABLE dataset.person(\n" +
                 "  fact_person_age NUMERIC(10,2),\n" +
                 "  label_person_name VARCHAR(128)\n" +
-                ");");
+                ");\n");
     }
 
     @Test
@@ -52,7 +52,7 @@ public class IdDdlGenerationStrategyTest {
                         // TODO: it would be nice to have default label generated first but for this POC it doesn't
                         // matter
                 "  label_person_pid VARCHAR(128)\n" +
-                ");");
+                ");\n");
     }
 
     @Test
@@ -63,10 +63,41 @@ public class IdDdlGenerationStrategyTest {
                 "  label_person_pid_name VARCHAR(128),\n" +
                 "  label_person_pid_lastname VARCHAR(128),\n" +
                 "  label_person_pid VARCHAR(128) PRIMARY KEY\n" +
-                ");");
+                ");\n");
     }
 
+    @Test
+    public void generateDdlForTwoDisconnectedDatasets() {
+        checkGeneratedDdl("person_car_disconnected.json",
+                "CREATE TABLE dataset.person(\n" +
+                "  fact_person_age NUMERIC(10,2),\n" +
+                "  label_person_pid_name VARCHAR(128),\n" +
+                "  label_person_pid_lastname VARCHAR(128),\n" +
+                "  label_person_pid VARCHAR(128) PRIMARY KEY\n" +
+                ");\n" +
+                "CREATE TABLE dataset.car(\n" +
+                "  fact_car_velocity NUMERIC(10,2),\n" +
+                "  label_car_brand_name VARCHAR(128),\n" +
+                "  label_car_brand VARCHAR(128)\n" +
+                ");\n");
+    }
 
+    @Test
+    public void generateDdlForTwoConnectedDatasets() {
+        checkGeneratedDdl("person_car_connected.json",
+                "CREATE TABLE dataset.person(\n" +
+                "  fact_person_age NUMERIC(10,2),\n" +
+                "  label_person_pid_name VARCHAR(128),\n" +
+                "  label_person_pid_lastname VARCHAR(128),\n" +
+                "  label_person_pid VARCHAR(128) PRIMARY KEY\n" +
+                ");\n" +
+                "CREATE TABLE dataset.car(\n" +
+                "  fact_car_velocity NUMERIC(10,2),\n" +
+                "  label_car_brand_name VARCHAR(128),\n" +
+                "  label_car_brand VARCHAR(128),\n" +
+                "  dataset_person VARCHAR(128)\n" +
+                ");\n");
+    }
 
     @Test
     public void goodSalesProjectModel() throws IOException {

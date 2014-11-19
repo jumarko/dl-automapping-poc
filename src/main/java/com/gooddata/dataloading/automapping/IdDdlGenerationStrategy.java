@@ -8,6 +8,7 @@ import com.gooddata.service.model.project.model.PmAttribute;
 import com.gooddata.service.model.project.model.PmDataset;
 import com.gooddata.service.model.project.model.PmFact;
 import com.gooddata.service.model.project.model.PmLabel;
+import com.gooddata.service.model.project.model.PmReference;
 import com.gooddata.service.model.project.model.ProjectModel;
 
 public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
@@ -16,35 +17,35 @@ public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
     public String generateDdl(ProjectModel projectModel) {
         notNull(projectModel, "projectModel cannot be null!");
 
+        final StringBuilder ddlBuilder = new StringBuilder();
+
         if (isNotEmpty(projectModel.getDatasets())) {
-            final PmDataset dataset = projectModel.getDatasets().get(0);
+            for (final PmDataset dataset : projectModel.getDatasets()) {
+                final String tableName = dataset.getIdentifier();
 
-            final String tableName = dataset.getIdentifier();
+                ddlBuilder.append("CREATE TABLE ").append(tableName).append("(");
+                ddlBuilder.append("\n");
 
-            final StringBuilder ddlBuilder = new StringBuilder();
-            ddlBuilder.append("CREATE TABLE ").append(tableName).append("(");
-            ddlBuilder.append("\n");
+                generateFactsDdl(dataset, ddlBuilder);
 
-            generateFactsDdl(dataset, ddlBuilder);
+                generateAnchorDdl(dataset, ddlBuilder);
 
-            generateAnchorDdl(dataset, ddlBuilder);
+                generateAttributesDdl(dataset, ddlBuilder);
 
-            generateAttributesDdl(dataset, ddlBuilder);
+                generateReferencesDdl(dataset, ddlBuilder);
+                dataset.getReferences();
 
-            // TODO: references
-//            dataset.getReferences();
-
-            removeTrailingComma(ddlBuilder);
-            ddlBuilder.append(");");
-
-            return ddlBuilder.toString();
+                removeTrailingComma(ddlBuilder);
+                ddlBuilder.append(");\n");
+            }
         }
 
-        return "";
+        return ddlBuilder.toString();
     }
 
+
     private void generateAnchorDdl(PmDataset dataset, StringBuilder ddlBuilder) {
-        if (dataset.getAnchor() != null && isNotEmpty(dataset.getAnchor().getLabels())) {
+        if (dataset.getAnchor() != null) {
             for (PmLabel anchorLabel : dataset.getAnchor().getLabels()) {
                 ddlBuilder.append("  ")
                         .append(subsituteChars(anchorLabel.getIdentifier()))
@@ -57,31 +58,38 @@ public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
     }
 
     private void generateAttributesDdl(PmDataset dataset, StringBuilder ddlBuilder) {
-        if (isNotEmpty(dataset.getAttributes())) {
-            for (final PmAttribute attribute : dataset.getAttributes()) {
-                // only attributes with labels should have a representation in OS because the data
-                // are loaded into labels not attributes
-                for (PmLabel label : attribute.getLabels()) {
-                    ddlBuilder.append("  ")
-                    .append(subsituteChars(label.getIdentifier()))
-                            // TODO: different data types?
-                    .append(" VARCHAR(128)")
-                    .append(',')
-                    .append('\n');
-                }
+        for (final PmAttribute attribute : dataset.getAttributes()) {
+            // only attributes with labels should have a representation in OS because the data
+            // are loaded into labels not attributes
+            for (PmLabel label : attribute.getLabels()) {
+                ddlBuilder.append("  ")
+                        .append(subsituteChars(label.getIdentifier()))
+                                // TODO: different data types?
+                        .append(" VARCHAR(128)")
+                        .append(',')
+                        .append('\n');
             }
         }
     }
 
     private void generateFactsDdl(PmDataset dataset, StringBuilder ddlBuilder) {
-        if (isNotEmpty(dataset.getFacts())) {
-            for (final PmFact fact : dataset.getFacts()) {
-                ddlBuilder.append("  ")
-                        .append(subsituteChars(fact.getIdentifier()))
-                        .append(" NUMERIC(10,2)")
-                        .append(',')
-                        .append('\n');
-            }
+        for (final PmFact fact : dataset.getFacts()) {
+            ddlBuilder.append("  ")
+                    .append(subsituteChars(fact.getIdentifier()))
+                    .append(" NUMERIC(10,2)")
+                    .append(',')
+                    .append('\n');
+        }
+    }
+
+    private void generateReferencesDdl(PmDataset dataset, StringBuilder ddlBuilder) {
+        for (final PmReference reference : dataset.getReferences()) {
+            ddlBuilder.append("  ")
+                    .append(subsituteChars(reference.getTarget()))
+                    // TODO: how to ensure proper data type?
+                    .append(" VARCHAR(128)")
+                    .append(',')
+                    .append('\n');
         }
     }
 

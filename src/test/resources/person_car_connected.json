@@ -1,0 +1,101 @@
+{
+  "projectModelView" : {
+    "model" : {
+      "projectModel" : {
+        "datasets" : [ {
+          "dataset" : {
+            "identifier" : "dataset.person",
+            "title" : "Person",
+            "anchor" : {
+              "attribute" : {
+                "identifier" : "attr.person.pid",
+                "title" : "PID",
+                "folder" : "Person",
+                "labels" : [ {
+                  "label" : {
+                    "identifier" : "label.person.pid.name",
+                    "title" : "name",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                }, {
+                  "label" : {
+                    "identifier" : "label.person.pid.lastname",
+                    "title" : "lastname",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                }, {
+                  "label" : {
+                    "identifier" : "label.person.pid",
+                    "title" : "PID",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                } ],
+                "defaultLabel" : "label.person.pid.name",
+                "sortOrder" : {
+                  "attributeSortOrder" : {
+                    "label" : "label.person.pid.name",
+                    "direction" : "ASC"
+                  }
+                }
+              }
+            },
+            "facts" : [ {
+              "fact" : {
+                "identifier" : "fact.person.age",
+                "title" : "age",
+                "folder" : "Person",
+                "dataType" : "DECIMAL(12,2)"
+              }
+            } ]
+          }
+        }, {
+          "dataset" : {
+            "identifier" : "dataset.car",
+            "title" : "Car",
+            "anchor" : {
+              "attribute" : {
+                "identifier" : "attr.car.factsof",
+                "title" : "Records of Car",
+                "folder" : "Car"
+              }
+            },
+            "attributes" : [ {
+              "attribute" : {
+                "identifier" : "attr.car.brand",
+                "title" : "brand",
+                "folder" : "Car",
+                "labels" : [ {
+                  "label" : {
+                    "identifier" : "label.car.brand.name",
+                    "title" : "name",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                }, {
+                  "label" : {
+                    "identifier" : "label.car.brand",
+                    "title" : "brand",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                } ]
+              }
+            } ],
+            "facts" : [ {
+              "fact" : {
+                "identifier" : "fact.car.velocity",
+                "title" : "velocity",
+                "folder" : "Car",
+                "dataType" : "DECIMAL(12,2)"
+              }
+            } ],
+            "references" : [ "dataset.person" ]
+          }
+        } ]
+      }
+    }
+  }
+}
