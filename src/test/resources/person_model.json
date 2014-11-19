@@ -1,0 +1,44 @@
+{
+  "projectModelView" : {
+    "model" : {
+      "projectModel" : {
+        "datasets" : [ {
+          "dataset" : {
+            "identifier" : "dataset.person",
+            "title" : "Person",
+            "anchor" : {
+              "attribute" : {
+                "identifier" : "attr.person.factsof",
+                "title" : "Records of Person",
+                "folder" : "Person"
+              }
+            },
+            "attributes" : [ {
+              "attribute" : {
+                "identifier" : "attr.person.name",
+                "title" : "name",
+                "folder" : "Person",
+                "labels" : [ {
+                  "label" : {
+                    "identifier" : "label.person.name",
+                    "title" : "name",
+                    "type" : "GDC.text",
+                    "dataType" : "VARCHAR(128)"
+                  }
+                } ]
+              }
+            } ],
+            "facts" : [ {
+              "fact" : {
+                "identifier" : "fact.person.age",
+                "title" : "age",
+                "folder" : "Person",
+                "dataType" : "DECIMAL(12,2)"
+              }
+            } ]
+          }
+        } ]
+      }
+    }
+  }
+}
