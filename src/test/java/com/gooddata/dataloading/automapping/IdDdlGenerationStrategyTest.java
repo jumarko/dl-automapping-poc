@@ -22,12 +22,22 @@ public class IdDdlGenerationStrategyTest {
     private DdlGenerationStrategy idStrategy = new IdDdlGenerationStrategy();
 
     @Test
+    public void ddlForEmptyModelShouldBeEmpty() {
+        assertThat(idStrategy.generateDdl(new ProjectModel(null, null)), isEmptyString());
+    }
+
+    @Test
     public void generateDdlForSimpleDatasetWithOneFactAndAttribute() throws IOException {
 
         final String personDdl = idStrategy.generateDdl(readModel("person_model.json"));
 
         assertThat(personDdl, not(isEmptyString()));
-        assertThat(personDdl, is("CREATE TABLE person"));
+        assertThat(personDdl, is(
+                "CREATE TABLE dataset.person(\n" +
+                        "  fact_person_age NUMERIC(10,2),\n" +
+                        "  label_person_name VARCHAR(128)\n" +
+                        ");"
+        ));
     }
 
 
@@ -35,7 +45,7 @@ public class IdDdlGenerationStrategyTest {
     @Test
     public void goodSalesProjectModel() throws IOException {
         idStrategy.generateDdl(readModel("goodsales_model.json"));
-
+        // TODO:
     }
 
 
