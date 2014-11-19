@@ -26,7 +26,7 @@ public class IdDdlGenerationStrategyTest {
     }
 
     @Test
-    public void generateDdlForDatasetWithOneFact() throws IOException {
+    public void generateDdlForDatasetWithOneFact() {
         checkGeneratedDdl("person_fact.json",
                 "CREATE TABLE dataset.person(\n" +
                 "  fact_person_age NUMERIC(10,2)\n" +
@@ -34,11 +34,24 @@ public class IdDdlGenerationStrategyTest {
     }
 
     @Test
-    public void generateDdlForDatasetWithOneFactAndAttribute() throws IOException {
+    public void generateDdlForDatasetWithOneFactAndAttribute() {
         checkGeneratedDdl("person_fact_attribute.json",
                 "CREATE TABLE dataset.person(\n" +
                 "  fact_person_age NUMERIC(10,2),\n" +
                 "  label_person_name VARCHAR(128)\n" +
+                ");");
+    }
+
+    @Test
+    public void generateDdlForDatasetWithOneFactAndAttributeWithMultipleLabels() {
+        checkGeneratedDdl("person_fact_attribute_labels.json",
+                "CREATE TABLE dataset.person(\n" +
+                "  fact_person_age NUMERIC(10,2),\n" +
+                "  label_person_pid_name VARCHAR(128),\n" +
+                "  label_person_pid_lastname VARCHAR(128),\n" +
+                        // TODO: it would be nice to have default label generated first but for this POC it doesn't
+                        // matter
+                "  label_person_pid VARCHAR(128)\n" +
                 ");");
     }
 
