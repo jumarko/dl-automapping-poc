@@ -13,6 +13,8 @@ import com.gooddata.service.model.project.model.ProjectModel;
 
 public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
 
+    public static final String SEPARATOR = "__";
+
     @Override
     public String generateDdl(ProjectModel projectModel) {
         notNull(projectModel, "projectModel cannot be null!");
@@ -21,7 +23,7 @@ public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
 
         if (isNotEmpty(projectModel.getDatasets())) {
             for (final PmDataset dataset : projectModel.getDatasets()) {
-                final String tableName = dataset.getIdentifier();
+                final String tableName = subsituteChars(dataset.getIdentifier());
 
                 ddlBuilder.append("CREATE TABLE ").append(tableName).append("(");
                 ddlBuilder.append("\n");
@@ -85,7 +87,7 @@ public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
     private void generateReferencesDdl(PmDataset dataset, StringBuilder ddlBuilder) {
         for (final PmReference reference : dataset.getReferences()) {
             ddlBuilder.append("  ")
-                    .append(subsituteChars(reference.getTarget()))
+                    .append("ref").append(SEPARATOR).append(subsituteChars(reference.getTarget()))
                     // TODO: how to ensure proper data type?
                     .append(" VARCHAR(128)")
                     .append(',')
@@ -94,7 +96,7 @@ public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
     }
 
     private String subsituteChars(String identifier) {
-        return identifier.replace('.', '_');
+        return identifier.replace(".", SEPARATOR);
     }
 
     private void removeTrailingComma(StringBuilder ddlBuilder) {
