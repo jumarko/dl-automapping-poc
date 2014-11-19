@@ -85,7 +85,7 @@ public class IdDdlGenerationStrategy implements DdlGenerationStrategy {
     private void generateReferencesDdl(PmDataset dataset, StringBuilder ddlBuilder) {
         for (final PmReference reference : dataset.getReferences()) {
             ddlBuilder.append("  ")
-                    .append("ref").append(SEPARATOR).append(subsituteChars(reference.getTarget()))
+                    .append(subsituteChars(reference.getTarget()))
                     // TODO: how to ensure proper data type?
                     .append(" VARCHAR(128)")
                     .append(',')

@@ -1,6 +1,6 @@
 CREATE TABLE dataset__timeline(
   dt__timeline__timeline NUMERIC(10,2),
-  ref__timeline VARCHAR(128)
+  timeline VARCHAR(128)
 );
 CREATE TABLE dataset__activity(
   label__activity__id__subject VARCHAR(128),
@@ -13,7 +13,7 @@ CREATE TABLE dataset__opportunity(
   label__opportunity__id__name VARCHAR(128),
   label__opportunity__id__url VARCHAR(128),
   label__opportunity__id VARCHAR(128),
-  ref__dataset__states VARCHAR(128)
+  dataset__states VARCHAR(128)
 );
 CREATE TABLE dataset__product(
   label__product__id__name VARCHAR(128),
@@ -41,7 +41,7 @@ CREATE TABLE dataset__opp_owner(
   label__opp_owner__id VARCHAR(128),
   label__opp_owner__region VARCHAR(128),
   label__opp_owner__department VARCHAR(128),
-  ref__oppownerstart VARCHAR(128)
+  oppownerstart VARCHAR(128)
 );
 CREATE TABLE dataset__activity_owner(
   label__activity_owner__id__name VARCHAR(128),
@@ -74,45 +74,45 @@ CREATE TABLE dataset__opp_snapshot(
   dt__opp_snapshot__effectivecontractstart NUMERIC(10,2),
   dt__opp_snapshot__effectivecontractend NUMERIC(10,2),
   label__opp_snapshot__accountstagesnapshot VARCHAR(128),
-  ref__dataset__opportunity VARCHAR(128),
-  ref__dataset__product VARCHAR(128),
-  ref__dataset__account VARCHAR(128),
-  ref__dataset__opp_owner VARCHAR(128),
-  ref__dataset__stage VARCHAR(128),
-  ref__dataset__forecast VARCHAR(128),
-  ref__dataset__bookingtype VARCHAR(128),
-  ref__dataset__amounttype VARCHAR(128),
-  ref__dataset__leadsource VARCHAR(128),
-  ref__dataset__leadsourceoriginal VARCHAR(128),
-  ref__dataset__sdrowner VARCHAR(128),
-  ref__dataset__sourcingorigin VARCHAR(128),
-  ref__dataset__productline VARCHAR(128),
-  ref__oppclose VARCHAR(128),
-  ref__oppcreated VARCHAR(128),
-  ref__snapshot VARCHAR(128),
-  ref__stage1plus VARCHAR(128),
-  ref__mqldate VARCHAR(128),
-  ref__leadcreate VARCHAR(128),
-  ref__effectivecontractstart VARCHAR(128),
-  ref__effectivecontractend VARCHAR(128),
-  ref__s2o VARCHAR(128),
-  ref__stage3opp VARCHAR(128)
+  dataset__opportunity VARCHAR(128),
+  dataset__product VARCHAR(128),
+  dataset__account VARCHAR(128),
+  dataset__opp_owner VARCHAR(128),
+  dataset__stage VARCHAR(128),
+  dataset__forecast VARCHAR(128),
+  dataset__bookingtype VARCHAR(128),
+  dataset__amounttype VARCHAR(128),
+  dataset__leadsource VARCHAR(128),
+  dataset__leadsourceoriginal VARCHAR(128),
+  dataset__sdrowner VARCHAR(128),
+  dataset__sourcingorigin VARCHAR(128),
+  dataset__productline VARCHAR(128),
+  oppclose VARCHAR(128),
+  oppcreated VARCHAR(128),
+  snapshot VARCHAR(128),
+  stage1plus VARCHAR(128),
+  mqldate VARCHAR(128),
+  leadcreate VARCHAR(128),
+  effectivecontractstart VARCHAR(128),
+  effectivecontractend VARCHAR(128),
+  s2o VARCHAR(128),
+  stage3opp VARCHAR(128)
 );
 CREATE TABLE dataset__activity_monitoring(
   dt__activity_monitoring__opp_created_date NUMERIC(10,2),
   dt__activity_monitoring__opp_close_date NUMERIC(10,2),
   dt__activity_monitoring__activity_date NUMERIC(10,2),
-  ref__dataset__activity VARCHAR(128),
-  ref__dataset__opportunity VARCHAR(128),
-  ref__dataset__product VARCHAR(128),
-  ref__dataset__account VARCHAR(128),
-  ref__dataset__opp_owner VARCHAR(128),
-  ref__dataset__activity_owner VARCHAR(128),
-  ref__dataset__stage VARCHAR(128),
-  ref__dataset__bookingtype VARCHAR(128),
-  ref__oppclose VARCHAR(128),
-  ref__oppcreated VARCHAR(128),
-  ref__activity VARCHAR(128)
+  dataset__activity VARCHAR(128),
+  dataset__opportunity VARCHAR(128),
+  dataset__product VARCHAR(128),
+  dataset__account VARCHAR(128),
+  dataset__opp_owner VARCHAR(128),
+  dataset__activity_owner VARCHAR(128),
+  dataset__stage VARCHAR(128),
+  dataset__bookingtype VARCHAR(128),
+  oppclose VARCHAR(128),
+  oppcreated VARCHAR(128),
+  activity VARCHAR(128)
 );
 CREATE TABLE dataset__stage_history(
   fact__stage_history__stage_velocity NUMERIC(10,2),
@@ -120,14 +120,14 @@ CREATE TABLE dataset__stage_history(
   dt__stage_history__opp_created_date NUMERIC(10,2),
   dt__stage_history__opp_close_date NUMERIC(10,2),
   label__stage_history__currentstatus VARCHAR(128),
-  ref__dataset__opportunity VARCHAR(128),
-  ref__dataset__product VARCHAR(128),
-  ref__dataset__account VARCHAR(128),
-  ref__dataset__opp_owner VARCHAR(128),
-  ref__dataset__stage VARCHAR(128),
-  ref__dataset__bookingtype VARCHAR(128),
-  ref__oppclose VARCHAR(128),
-  ref__oppcreated VARCHAR(128)
+  dataset__opportunity VARCHAR(128),
+  dataset__product VARCHAR(128),
+  dataset__account VARCHAR(128),
+  dataset__opp_owner VARCHAR(128),
+  dataset__stage VARCHAR(128),
+  dataset__bookingtype VARCHAR(128),
+  oppclose VARCHAR(128),
+  oppcreated VARCHAR(128)
 );
 CREATE TABLE dataset__opp_records(
   fact__opp_records__amount NUMERIC(10,2),
@@ -150,37 +150,37 @@ CREATE TABLE dataset__opp_records(
   dt__opp_records__stage3opp NUMERIC(10,2),
   label__opp_records__opp_records_conctn_point VARCHAR(128),
   label__opp_records__factsof VARCHAR(128),
-  ref__dataset__opportunity VARCHAR(128),
-  ref__dataset__product VARCHAR(128),
-  ref__dataset__account VARCHAR(128),
-  ref__dataset__opp_owner VARCHAR(128),
-  ref__dataset__stage VARCHAR(128),
-  ref__dataset__forecast VARCHAR(128),
-  ref__dataset__bookingtype VARCHAR(128),
-  ref__dataset__amounttype VARCHAR(128),
-  ref__dataset__leadsource VARCHAR(128),
-  ref__dataset__leadsourceoriginal VARCHAR(128),
-  ref__dataset__sdrowner VARCHAR(128),
-  ref__dataset__sourcingorigin VARCHAR(128),
-  ref__dataset__leadchannel VARCHAR(128),
-  ref__dataset__renewalstatus VARCHAR(128),
-  ref__dataset__sdrperformancestatus VARCHAR(128),
-  ref__dataset__productline VARCHAR(128),
-  ref__dataset__winlossreason VARCHAR(128),
-  ref__oppclose VARCHAR(128),
-  ref__oppcreated VARCHAR(128),
-  ref__stage1plus VARCHAR(128),
-  ref__mqldate VARCHAR(128),
-  ref__leadcreate VARCHAR(128),
-  ref__firstcontactdate VARCHAR(128),
-  ref__laststage0plus VARCHAR(128),
-  ref__effectivecontractstart VARCHAR(128),
-  ref__effectivecontractend VARCHAR(128),
-  ref__firstmeeting VARCHAR(128),
-  ref__s2o VARCHAR(128),
-  ref__opportunitylost VARCHAR(128),
-  ref__stage3opp VARCHAR(128),
-  ref__winlost VARCHAR(128)
+  dataset__opportunity VARCHAR(128),
+  dataset__product VARCHAR(128),
+  dataset__account VARCHAR(128),
+  dataset__opp_owner VARCHAR(128),
+  dataset__stage VARCHAR(128),
+  dataset__forecast VARCHAR(128),
+  dataset__bookingtype VARCHAR(128),
+  dataset__amounttype VARCHAR(128),
+  dataset__leadsource VARCHAR(128),
+  dataset__leadsourceoriginal VARCHAR(128),
+  dataset__sdrowner VARCHAR(128),
+  dataset__sourcingorigin VARCHAR(128),
+  dataset__leadchannel VARCHAR(128),
+  dataset__renewalstatus VARCHAR(128),
+  dataset__sdrperformancestatus VARCHAR(128),
+  dataset__productline VARCHAR(128),
+  dataset__winlossreason VARCHAR(128),
+  oppclose VARCHAR(128),
+  oppcreated VARCHAR(128),
+  stage1plus VARCHAR(128),
+  mqldate VARCHAR(128),
+  leadcreate VARCHAR(128),
+  firstcontactdate VARCHAR(128),
+  laststage0plus VARCHAR(128),
+  effectivecontractstart VARCHAR(128),
+  effectivecontractend VARCHAR(128),
+  firstmeeting VARCHAR(128),
+  s2o VARCHAR(128),
+  opportunitylost VARCHAR(128),
+  stage3opp VARCHAR(128),
+  winlost VARCHAR(128)
 );
 CREATE TABLE dataset__forecast(
   label__forecast__id__forecastcategoryordered VARCHAR(128),
@@ -197,20 +197,20 @@ CREATE TABLE dataset__goals(
   dt__goals__oppcreated NUMERIC(10,2),
   dt__goals__oppclose NUMERIC(10,2),
   label__goals__quotatype VARCHAR(128),
-  ref__dataset__product VARCHAR(128),
-  ref__dataset__opp_owner VARCHAR(128),
-  ref__dataset__activity_owner VARCHAR(128),
-  ref__dataset__bookingtype VARCHAR(128),
-  ref__dataset__amounttype VARCHAR(128),
-  ref__dataset__sdrowner VARCHAR(128),
-  ref__dataset__sourcingorigin VARCHAR(128),
-  ref__oppclose VARCHAR(128),
-  ref__oppcreated VARCHAR(128),
-  ref__activity VARCHAR(128),
-  ref__snapshot VARCHAR(128),
-  ref__stage1plus VARCHAR(128),
-  ref__mqldate VARCHAR(128),
-  ref__s2o VARCHAR(128)
+  dataset__product VARCHAR(128),
+  dataset__opp_owner VARCHAR(128),
+  dataset__activity_owner VARCHAR(128),
+  dataset__bookingtype VARCHAR(128),
+  dataset__amounttype VARCHAR(128),
+  dataset__sdrowner VARCHAR(128),
+  dataset__sourcingorigin VARCHAR(128),
+  oppclose VARCHAR(128),
+  oppcreated VARCHAR(128),
+  activity VARCHAR(128),
+  snapshot VARCHAR(128),
+  stage1plus VARCHAR(128),
+  mqldate VARCHAR(128),
+  s2o VARCHAR(128)
 );
 CREATE TABLE dataset__amounttype(
   label__amounttype__amounttype VARCHAR(128)
@@ -237,16 +237,16 @@ CREATE TABLE dataset__opp_changes(
   fact__opp_changes__amount_changed_current_q_potential NUMERIC(10,2),
   label__opp_changes__interval_changes VARCHAR(128),
   label__opp_changes__previous_stage VARCHAR(128),
-  ref__dataset__opportunity VARCHAR(128),
-  ref__dataset__product VARCHAR(128),
-  ref__dataset__account VARCHAR(128),
-  ref__dataset__opp_owner VARCHAR(128),
-  ref__dataset__stage VARCHAR(128),
-  ref__dataset__bookingtype VARCHAR(128),
-  ref__dataset__amounttype VARCHAR(128),
-  ref__dataset__productline VARCHAR(128),
-  ref__oppclose VARCHAR(128),
-  ref__previous_close_date VARCHAR(128)
+  dataset__opportunity VARCHAR(128),
+  dataset__product VARCHAR(128),
+  dataset__account VARCHAR(128),
+  dataset__opp_owner VARCHAR(128),
+  dataset__stage VARCHAR(128),
+  dataset__bookingtype VARCHAR(128),
+  dataset__amounttype VARCHAR(128),
+  dataset__productline VARCHAR(128),
+  oppclose VARCHAR(128),
+  previous_close_date VARCHAR(128)
 );
 CREATE TABLE dataset__sourcingorigin(
   label__sourcingorigin__techsourcingtype VARCHAR(128),
@@ -277,8 +277,8 @@ CREATE TABLE dataset__opportunityanalysis(
   label__opportunityanalysis__month VARCHAR(128),
   label__opportunityanalysis__month__monthsortingnew VARCHAR(128),
   label__opportunityanalysis__cohorttype VARCHAR(128),
-  ref__dataset__opp_records VARCHAR(128),
-  ref__dataset__consolidatedmarketingstatus VARCHAR(128)
+  dataset__opp_records VARCHAR(128),
+  dataset__consolidatedmarketingstatus VARCHAR(128)
 );
 CREATE TABLE dataset__consolidatedmarketingstatus(
   label__consolidatedmarketingstatus__consolidatedmarketingstatus VARCHAR(128),
@@ -314,12 +314,12 @@ CREATE TABLE dataset__mrranalysis(
   label__mrranalysis__quarter__quarterorder VARCHAR(128),
   label__mrranalysis__quarter VARCHAR(128),
   label__mrranalysis__projecttokenhash VARCHAR(128),
-  ref__dataset__account VARCHAR(128),
-  ref__dataset__opp_owner VARCHAR(128),
-  ref__dataset__bookingtype VARCHAR(128),
-  ref__dataset__renewalstatus VARCHAR(128),
-  ref__oppclose VARCHAR(128),
-  ref__mrranalysis VARCHAR(128)
+  dataset__account VARCHAR(128),
+  dataset__opp_owner VARCHAR(128),
+  dataset__bookingtype VARCHAR(128),
+  dataset__renewalstatus VARCHAR(128),
+  oppclose VARCHAR(128),
+  mrranalysis VARCHAR(128)
 );
 CREATE TABLE dataset__campaignhierarchy(
   fact__campaignhierarchy__no_members NUMERIC(10,2),
@@ -348,8 +348,8 @@ CREATE TABLE dataset__campaignhierarchy(
   label__campaignhierarchy__campaignlvl5 VARCHAR(128),
   label__campaignhierarchy__campaignstatus VARCHAR(128),
   label__campaignhierarchy__campaigntype VARCHAR(128),
-  ref__campaignstart VARCHAR(128),
-  ref__campaignend VARCHAR(128)
+  campaignstart VARCHAR(128),
+  campaignend VARCHAR(128)
 );
 CREATE TABLE dataset__campaignresults(
   dt__campaignresults__campaignmember NUMERIC(10,2),
@@ -357,17 +357,17 @@ CREATE TABLE dataset__campaignresults(
   label__campaignresults__campaign_result_conctn_point VARCHAR(128),
   label__campaignresults__is_primary_campaign VARCHAR(128),
   label__campaignresults__campaign_touch_id VARCHAR(128),
-  ref__dataset__opp_records VARCHAR(128),
-  ref__dataset__campaignhierarchy VARCHAR(128),
-  ref__campaignmember VARCHAR(128),
-  ref__campaignmember1 VARCHAR(128)
+  dataset__opp_records VARCHAR(128),
+  dataset__campaignhierarchy VARCHAR(128),
+  campaignmember VARCHAR(128),
+  campaignmember1 VARCHAR(128)
 );
 CREATE TABLE dataset__campaigninfluence(
   fact__campaigninfluence__touch_score NUMERIC(10,2),
   fact__campaigninfluence__touch_score_normalized_opp NUMERIC(10,2),
   label__campaigninfluence__influencetype VARCHAR(128),
   label__campaigninfluence__touch VARCHAR(128),
-  ref__dataset__opp_records VARCHAR(128),
-  ref__dataset__campaignhierarchy VARCHAR(128),
-  ref__campaigninfluence VARCHAR(128)
+  dataset__opp_records VARCHAR(128),
+  dataset__campaignhierarchy VARCHAR(128),
+  campaigninfluence VARCHAR(128)
 );
