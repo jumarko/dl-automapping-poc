@@ -14,8 +14,9 @@ import java.util.regex.Pattern;
 
 public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
 
-    public static final String SEPARATOR = "__";
-    private static final Pattern NORMALIZATION_PATTERN = Pattern.compile("[^a-zA-Z0-9]+");
+    private static final Pattern NORMALIZATION_PATTERN = Pattern.compile("[^a-zA-Z0-9_]+");
+    private static final String NORMALIZATION_CHAR = "_";
+    public static final String ATTRIBUTE_LABEL_SEPARATOR = "__";
 
     @Override
     public String generateDdl(ProjectModel projectModel) {
@@ -79,7 +80,7 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
         return isReferenceKey(label)
                 ? label.getTitle()
                 // attr__label convention to be able to associate label to parent attribute
-                : attribute.getTitle() + SEPARATOR + label.getTitle();
+                : attribute.getTitle() + ATTRIBUTE_LABEL_SEPARATOR + label.getTitle();
     }
 
     private void generateFactsDdl(PmDataset dataset, StringBuilder ddlBuilder) {
@@ -105,7 +106,7 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
 
     private String normalize(String identifier) {
         return NORMALIZATION_PATTERN.matcher(identifier)
-                .replaceAll(SEPARATOR)
+                .replaceAll(NORMALIZATION_CHAR)
                 .toLowerCase();
     }
 

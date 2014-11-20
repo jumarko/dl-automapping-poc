@@ -94,7 +94,7 @@ public class TitleDdlGenerationStrategyTest {
                 "  velocity NUMERIC(10,2),\n" +
                 "  brand__name VARCHAR(128),\n" +
                 "  brand VARCHAR(128),\n" +
-                "  dataset__person VARCHAR(128)\n" +
+                "  dataset_person VARCHAR(128)\n" +
                 ");\n");
     }
 
