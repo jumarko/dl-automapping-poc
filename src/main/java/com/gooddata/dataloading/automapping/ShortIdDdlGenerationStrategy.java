@@ -3,20 +3,23 @@ package com.gooddata.dataloading.automapping;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang.Validate.notNull;
 
+import com.gooddata.service.model.project.model.HasIdentifier;
 import com.gooddata.service.model.project.model.PmAttribute;
 import com.gooddata.service.model.project.model.PmDataset;
 import com.gooddata.service.model.project.model.PmFact;
 import com.gooddata.service.model.project.model.PmLabel;
 import com.gooddata.service.model.project.model.PmReference;
 import com.gooddata.service.model.project.model.ProjectModel;
+import org.apache.commons.lang.StringUtils;
 
-import java.util.regex.Pattern;
+public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
 
-public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
+    public static final String SEPARATOR = "__";
 
-    private static final Pattern NORMALIZATION_PATTERN = Pattern.compile("[^a-zA-Z0-9_]+");
-    private static final String NORMALIZATION_CHAR = "_";
-    public static final String ATTRIBUTE_LABEL_SEPARATOR = "__";
+    private static final String FACT_PREFIX = "f" + SEPARATOR;
+    private static final String LABEL_PREFIX = "l" + SEPARATOR;
+    private static final String DATE_PREFIX = "d" + SEPARATOR;
+    private static final String REF_PREFIX = "r" + SEPARATOR;
 
     @Override
     public String generateDdl(ProjectModel projectModel) {
@@ -26,7 +29,7 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
 
         if (isNotEmpty(projectModel.getDatasets())) {
             for (final PmDataset dataset : projectModel.getDatasets()) {
-                final String tableName = normalize(dataset.getTitle());
+                final String tableName = shortenId(dataset);
 
                 ddlBuilder.append("CREATE TABLE ").append(tableName).append("(");
                 ddlBuilder.append("\n");
@@ -38,7 +41,6 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
                 generateAttributesDdl(dataset, ddlBuilder);
 
                 generateReferencesDdl(dataset, ddlBuilder);
-                dataset.getReferences();
 
                 removeTrailingComma(ddlBuilder);
                 ddlBuilder.append(");\n");
@@ -53,7 +55,7 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
         if (dataset.getAnchor() != null) {
             for (PmLabel anchorLabel : dataset.getAnchor().getLabels()) {
                 ddlBuilder.append("  ")
-                        .append(normalize(getLabelTitle(dataset.getAnchor(), anchorLabel)))
+                        .append(generateLabelColumnName(dataset.getAnchor(), anchorLabel))
                         .append(" VARCHAR(128)")
                         .append(',')
                         .append('\n');
@@ -67,7 +69,7 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
             // are loaded into labels not attributes
             for (PmLabel label : attribute.getLabels()) {
                 ddlBuilder.append("  ")
-                        .append(normalize(getLabelTitle(attribute, label)))
+                        .append(generateLabelColumnName(attribute, label))
                                 // TODO: different data types?
                         .append(" VARCHAR(128)")
                         .append(',')
@@ -76,27 +78,39 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
         }
     }
 
-    private String getLabelTitle(PmAttribute attribute, PmLabel label) {
-        return isReferenceKey(label)
-                ? label.getTitle()
-                // attr__label convention to be able to associate label to parent attribute
-                : attribute.getTitle() + ATTRIBUTE_LABEL_SEPARATOR + label.getTitle();
-    }
-
     private void generateFactsDdl(PmDataset dataset, StringBuilder ddlBuilder) {
         for (final PmFact fact : dataset.getFacts()) {
             ddlBuilder.append("  ")
-                    .append(normalize(fact.getTitle()))
+                    .append(FACT_PREFIX).append(shortenId(fact))
                     .append(" NUMERIC(10,2)")
                     .append(',')
                     .append('\n');
         }
     }
 
+    private String generateLabelColumnName(PmAttribute attribute, PmLabel label) {
+        return TitleDdlGenerationStrategy.isReferenceKey(label)
+                ? LABEL_PREFIX + shortenId(label)
+                : LABEL_PREFIX + shortenId(attribute) + SEPARATOR + shortenId(label);
+    }
+
+    private String shortenId(HasIdentifier field) {
+        notNull(field, "field cannot be null!");
+        final String id = field.getIdentifier();
+        return shortId(id);
+    }
+
+    private String shortId(String id) {
+        if (id == null || id.length() == 0){
+            return "";
+        }
+        return subsituteChars(StringUtils.substringAfterLast(id, "."));
+    }
+
     private void generateReferencesDdl(PmDataset dataset, StringBuilder ddlBuilder) {
         for (final PmReference reference : dataset.getReferences()) {
             ddlBuilder.append("  ")
-                    .append(normalize(reference.getTarget()))
+                    .append(REF_PREFIX).append(shortId(reference.getTarget()))
                     // TODO: how to ensure proper data type?
                     .append(" VARCHAR(128)")
                     .append(',')
@@ -104,10 +118,8 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
         }
     }
 
-    private String normalize(String identifier) {
-        return NORMALIZATION_PATTERN.matcher(identifier)
-                .replaceAll(NORMALIZATION_CHAR)
-                .toLowerCase();
+    private String subsituteChars(String identifier) {
+        return identifier.replace(".", SEPARATOR);
     }
 
     private void removeTrailingComma(StringBuilder ddlBuilder) {
@@ -117,20 +129,5 @@ public class TitleDdlGenerationStrategy implements DdlGenerationStrategy {
         }
     }
 
-     /**
-     * Simple heuristic to find out, if the LDM field is a reference key. Currently it works
-     * only if the "dot" naming convention is used. LDM field is considered as reference key
-     * if its name starts with 'label' and consists of three names separated by dots,
-     * eg. "label.opportunity.name".
-     *
-     * @param ldmField LDM field
-     * @return whether LDM field is a reference key
-     */
-    public static boolean isReferenceKey(final PmLabel ldmField) {
-        notNull(ldmField, "ldmField cannot be null!");
-        final String ldmFieldId = ldmField.getIdentifier();
-        // return true for ldm fields starting with 'label' and having 3 sections separated by dots
-        return ldmFieldId.startsWith("label") && ldmFieldId.split("\\.").length == 3;
-    }
 
 }
