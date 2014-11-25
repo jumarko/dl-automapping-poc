@@ -1,6 +1,7 @@
 package com.gooddata.dataloading.automapping;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static org.apache.commons.lang.StringUtils.substringAfterLast;
 import static org.apache.commons.lang.Validate.notNull;
 
 import com.gooddata.service.model.project.model.HasIdentifier;
@@ -11,7 +12,6 @@ import com.gooddata.service.model.project.model.PmFact;
 import com.gooddata.service.model.project.model.PmLabel;
 import com.gooddata.service.model.project.model.PmReference;
 import com.gooddata.service.model.project.model.ProjectModel;
-import org.apache.commons.lang.StringUtils;
 
 public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
 
@@ -57,7 +57,7 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
         if (dataset.getAnchor() != null) {
             for (PmLabel anchorLabel : dataset.getAnchor().getLabels()) {
                 ddlBuilder.append("  ")
-                        .append(generateLabelColumnName(dataset.getAnchor(), anchorLabel))
+                        .append(generateLabelColumnName(dataset, dataset.getAnchor(), anchorLabel))
                         .append(" VARCHAR(128)")
                         .append(',')
                         .append('\n');
@@ -71,7 +71,7 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
             // are loaded into labels not attributes
             for (PmLabel label : attribute.getLabels()) {
                 ddlBuilder.append("  ")
-                        .append(generateLabelColumnName(attribute, label))
+                        .append(generateLabelColumnName(dataset, attribute, label))
                                 // TODO: different data types?
                         .append(" VARCHAR(128)")
                         .append(',')
@@ -83,45 +83,63 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
     private void generateFactsDdl(PmDataset dataset, StringBuilder ddlBuilder) {
         for (final PmFact fact : dataset.getFacts()) {
             ddlBuilder.append("  ")
-                    .append(FACT_PREFIX).append(shortenId(fact))
+                    .append(FACT_PREFIX).append(shortenId(dataset, fact))
                     .append(" NUMERIC(10,2)")
                     .append(',')
                     .append('\n');
         }
     }
 
-    private String generateLabelColumnName(PmAttribute attribute, PmLabel label) {
+    private String generateLabelColumnName(PmDataset dataset, PmAttribute attribute, PmLabel label) {
         return TitleDdlGenerationStrategy.isReferenceKey(label)
-                ? LABEL_PREFIX + shortenId(label)
-                : LABEL_PREFIX + shortenId(attribute) + OS_SEPARATOR + shortenId(label);
+                ? LABEL_PREFIX + shortenId(dataset, label)
+                : LABEL_PREFIX + shortenId(dataset, attribute) + OS_SEPARATOR + shortenId(dataset, label);
     }
 
     private String shortenId(HasIdentifier field) {
         notNull(field, "field cannot be null!");
         final String id = field.getIdentifier();
-        return shortId(id);
+        return shortId(null, id);
     }
 
-    private String shortId(String id) {
-        if (id == null || id.length() == 0){
+    private String shortenId(PmDataset dataset, HasIdentifier field) {
+        notNull(field, "field cannot be null!");
+        final String id = field.getIdentifier();
+        return shortId(dataset, id);
+    }
+
+    private String shortId(PmDataset parentDataset, String fieldId) {
+        if (fieldId == null || fieldId.length() == 0){
             return "";
         }
-        final String shortId = id.contains(LDM_SEPARATOR)
-                ? StringUtils.substringAfterLast(id, LDM_SEPARATOR)
-                : id;
+
+        final String shortId;
+        if (fieldId.contains(LDM_SEPARATOR)) {
+            if (parentDataset != null) {
+                // check if field id conforms to the dataset to which the field belongs
+                shortId = substringAfterLast(fieldId, LDM_SEPARATOR);
+            } else {
+                shortId = substringAfterLast(fieldId, LDM_SEPARATOR);
+
+            }
+        } else {
+            shortId = fieldId;
+        }
+
         return subsituteChars(shortId);
     }
+
 
     private void generateReferencesDdl(ProjectModel projectModel, PmDataset dataset, StringBuilder ddlBuilder) {
         for (final PmReference reference : dataset.getReferences()) {
             if (isDateDimensionReference(projectModel, reference)) {
                 ddlBuilder.append("  ")
-                        .append(DATE_PREFIX).append(shortId(reference.getTarget()))
+                        .append(DATE_PREFIX).append(shortId(dataset, reference.getTarget()))
                         .append(" DATE");
 
             } else {
                 ddlBuilder.append("  ")
-                        .append(REF_PREFIX).append(shortId(reference.getTarget()))
+                        .append(REF_PREFIX).append(shortId(dataset, reference.getTarget()))
                         // TODO: how to ensure proper data type?
                         .append(" VARCHAR(128)");
             }

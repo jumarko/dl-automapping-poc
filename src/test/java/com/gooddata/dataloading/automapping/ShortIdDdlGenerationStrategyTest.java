@@ -28,7 +28,7 @@ public class ShortIdDdlGenerationStrategyTest {
 
     @Test
     public void generateDdlForDatasetWithOneFact() {
-        checkGeneratedDdl("person-fac   t.json",
+        checkGeneratedDdl("person-fact.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2)\n" +
                 ");\n");
