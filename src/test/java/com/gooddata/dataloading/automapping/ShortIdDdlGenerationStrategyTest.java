@@ -128,8 +128,8 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-fields-from-car.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
-                "  a__pid VARCHAR(128),\n" +
                 "  f__car__velocity NUMERIC(10,2),\n" +
+                "  a__pid VARCHAR(128),\n" +
                 "  l__car__pid__name VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128)\n" +

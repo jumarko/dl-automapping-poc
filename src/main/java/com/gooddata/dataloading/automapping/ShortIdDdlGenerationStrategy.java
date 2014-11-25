@@ -75,24 +75,28 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
         // first iteration to find attribute' label such as "label.person.pid"
         for (final PmLabel label : attribute.getLabels()) {
             if (isLabelRepresentingTheAttributeItself(attribute, label)) {
-                ddlBuilder.append("  ");
-                ddlBuilder.append(ATTRIBUTE_PREFIX).append(shortenId(dataset, attribute));
-                ddlBuilder.append(" VARCHAR(128)")
-                        .append(',')
-                        .append('\n');
+                generateFieldDdl(ddlBuilder,
+                        ATTRIBUTE_PREFIX + shortenId(dataset, attribute),
+                        "VARCHAR(128)");
             }
         }
 
         // generate DDL for all other labels
         for (PmLabel label : attribute.getLabels()) {
             if (!isLabelRepresentingTheAttributeItself(attribute, label)) {
-                ddlBuilder.append("  ");
-                ddlBuilder.append(generateLabelColumnName(dataset, attribute, label));
-                ddlBuilder.append(" VARCHAR(128)")
-                        .append(',')
-                        .append('\n');
+                generateFieldDdl(ddlBuilder,
+                        generateLabelColumnName(dataset, attribute, label),
+                        "VARCHAR(128)");
             }
         }
+    }
+
+    private void generateFieldDdl(StringBuilder ddlBuilder, String fieldName, String fieldType) {
+        ddlBuilder.append("  ");
+        ddlBuilder.append(fieldName);
+        ddlBuilder.append(" ").append(fieldType)
+                .append(',')
+                .append('\n');
     }
 
     private boolean isLabelRepresentingTheAttributeItself(PmAttribute attribute, PmLabel label) {
@@ -102,11 +106,9 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
 
     private void generateFactsDdl(PmDataset dataset, StringBuilder ddlBuilder) {
         for (final PmFact fact : dataset.getFacts()) {
-            ddlBuilder.append("  ")
-                    .append(FACT_PREFIX).append(shortenId(dataset, fact))
-                    .append(" NUMERIC(10,2)")
-                    .append(',')
-                    .append('\n');
+            generateFieldDdl(ddlBuilder,
+                    FACT_PREFIX + shortenId(dataset, fact),
+                    "NUMERIC(10,2)");
         }
     }
 
@@ -160,17 +162,15 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
     private void generateReferencesDdl(ProjectModel projectModel, PmDataset dataset, StringBuilder ddlBuilder) {
         for (final PmReference reference : dataset.getReferences()) {
             if (isDateDimensionReference(projectModel, reference)) {
-                ddlBuilder.append("  ")
-                        .append(DATE_PREFIX).append(shortId(dataset, reference.getTarget()))
-                        .append(" DATE");
+                generateFieldDdl(ddlBuilder,
+                        DATE_PREFIX + shortId(dataset, reference.getTarget()),
+                        "DATE");
 
             } else {
-                ddlBuilder.append("  ")
-                        .append(REF_PREFIX).append(shortId(dataset, reference.getTarget()))
-                        // TODO: how to ensure proper data type?
-                        .append(" VARCHAR(128)");
+                generateFieldDdl(ddlBuilder,
+                        REF_PREFIX + shortId(dataset, reference.getTarget()),
+                        "VARCHAR(128)");
             }
-            ddlBuilder.append(',').append('\n');
         }
     }
 
