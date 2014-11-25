@@ -22,6 +22,7 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
     public static final String LDM_SEPARATOR_ESCAPED = "\\.";
 
     private static final String FACT_PREFIX = "f" + OS_SEPARATOR;
+    private static final String ATTRIBUTE_PREFIX = "a" + OS_SEPARATOR;
     private static final String LABEL_PREFIX = "l" + OS_SEPARATOR;
     private static final String DATE_PREFIX = "d" + OS_SEPARATOR;
     private static final String REF_PREFIX = "r" + OS_SEPARATOR;
@@ -58,13 +59,7 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
 
     private void generateAnchorDdl(PmDataset dataset, StringBuilder ddlBuilder) {
         if (dataset.getAnchor() != null) {
-            for (PmLabel anchorLabel : dataset.getAnchor().getLabels()) {
-                ddlBuilder.append("  ")
-                        .append(generateLabelColumnName(dataset, dataset.getAnchor(), anchorLabel))
-                        .append(" VARCHAR(128)")
-                        .append(',')
-                        .append('\n');
-            }
+            generateAttributeDdl(dataset, ddlBuilder, dataset.getAnchor());
         }
     }
 
@@ -72,16 +67,37 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
         for (final PmAttribute attribute : dataset.getAttributes()) {
             // only attributes with labels should have a representation in OS because the data
             // are loaded into labels not attributes
+            generateAttributeDdl(dataset, ddlBuilder, attribute);
+        }
+    }
 
-            for (PmLabel label : attribute.getLabels()) {
-                ddlBuilder.append("  ")
-                        .append(generateLabelColumnName(dataset, attribute, label))
-                                // TODO: different data types?
-                        .append(" VARCHAR(128)")
+    private void generateAttributeDdl(PmDataset dataset, StringBuilder ddlBuilder, PmAttribute attribute) {
+        // first iteration to find attribute' label such as "label.person.pid"
+        for (final PmLabel label : attribute.getLabels()) {
+            if (isLabelRepresentingTheAttributeItself(attribute, label)) {
+                ddlBuilder.append("  ");
+                ddlBuilder.append(ATTRIBUTE_PREFIX).append(shortenId(dataset, attribute));
+                ddlBuilder.append(" VARCHAR(128)")
                         .append(',')
                         .append('\n');
             }
         }
+
+        // generate DDL for all other labels
+        for (PmLabel label : attribute.getLabels()) {
+            if (!isLabelRepresentingTheAttributeItself(attribute, label)) {
+                ddlBuilder.append("  ");
+                ddlBuilder.append(generateLabelColumnName(dataset, attribute, label));
+                ddlBuilder.append(" VARCHAR(128)")
+                        .append(',')
+                        .append('\n');
+            }
+        }
+    }
+
+    private boolean isLabelRepresentingTheAttributeItself(PmAttribute attribute, PmLabel label) {
+        return substringAfter(attribute.getIdentifier(), LDM_SEPARATOR)
+                .equals(substringAfter(label.getIdentifier(), LDM_SEPARATOR));
     }
 
     private void generateFactsDdl(PmDataset dataset, StringBuilder ddlBuilder) {

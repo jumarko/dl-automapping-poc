@@ -39,7 +39,7 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-fact-attribute.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
-                "  l__name VARCHAR(128)\n" +
+                "  a__name VARCHAR(128)\n" +
                 ");\n");
     }
 
@@ -48,11 +48,9 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-fact-attribute-labels.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
+                "  a__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
-                "  l__pid__lastname VARCHAR(128),\n" +
-                        // TODO: it would be nice to have default label generated first but for this POC it doesn't
-                        // matter
-                "  l__pid VARCHAR(128)\n" +
+                "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n");
     }
 
@@ -61,9 +59,9 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-connection-point.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
+                "  a__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
-                "  l__pid__lastname VARCHAR(128),\n" +
-                "  l__pid VARCHAR(128)\n" +
+                "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n");
     }
 
@@ -73,9 +71,9 @@ public class ShortIdDdlGenerationStrategyTest {
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
                 "  f__car__velocity NUMERIC(10,2),\n" +
+                "  a__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128),\n" +
-                "  l__pid VARCHAR(128),\n" +
                 "  d__birthdate DATE\n" +
                 ");\n");
     }
@@ -85,14 +83,14 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-car-disconnected.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
+                "  a__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
-                "  l__pid__lastname VARCHAR(128),\n" +
-                "  l__pid VARCHAR(128)\n" +
+                "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n" +
                 "CREATE TABLE car(\n" +
                 "  f__velocity NUMERIC(10,2),\n" +
-                "  l__brand__name VARCHAR(128),\n" +
-                "  l__brand VARCHAR(128)\n" +
+                "  a__brand VARCHAR(128),\n" +
+                "  l__brand__name VARCHAR(128)\n" +
                 ");\n");
     }
 
@@ -101,14 +99,14 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-car-connected.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
+                "  a__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
-                "  l__pid__lastname VARCHAR(128),\n" +
-                "  l__pid VARCHAR(128)\n" +
+                "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n" +
                 "CREATE TABLE car(\n" +
                 "  f__velocity NUMERIC(10,2),\n" +
+                "  a__brand VARCHAR(128),\n" +
                 "  l__brand__name VARCHAR(128),\n" +
-                "  l__brand VARCHAR(128),\n" +
                 "  r__person VARCHAR(128)\n" +
                 ");\n");
     }
@@ -119,9 +117,9 @@ public class ShortIdDdlGenerationStrategyTest {
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
                 "  f__car__velocity NUMERIC(10,2),\n" +
+                "  a__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
-                "  l__pid__lastname VARCHAR(128),\n" +
-                "  l__pid VARCHAR(128)\n" +
+                "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n");
     }
 
@@ -130,11 +128,11 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-fields-from-car.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
+                "  a__pid VARCHAR(128),\n" +
                 "  f__car__velocity NUMERIC(10,2),\n" +
                 "  l__car__pid__name VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
-                "  l__pid__lastname VARCHAR(128),\n" +
-                "  l__pid VARCHAR(128)\n" +
+                "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n");
     }
 
