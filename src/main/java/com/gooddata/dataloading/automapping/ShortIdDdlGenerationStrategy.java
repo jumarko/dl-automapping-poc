@@ -26,6 +26,7 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
     private static final String LABEL_PREFIX = "l" + OS_SEPARATOR;
     private static final String DATE_PREFIX = "d" + OS_SEPARATOR;
     private static final String REF_PREFIX = "r" + OS_SEPARATOR;
+    private static final String CONNECTION_POINT_PREFIX = "cp" + OS_SEPARATOR;
 
     @Override
     public String generateDdl(ProjectModel projectModel) {
@@ -59,7 +60,7 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
 
     private void generateAnchorDdl(PmDataset dataset, StringBuilder ddlBuilder) {
         if (dataset.getAnchor() != null) {
-            generateAttributeDdl(dataset, ddlBuilder, dataset.getAnchor());
+            generateAttributeDdl(dataset, ddlBuilder, dataset.getAnchor(), CONNECTION_POINT_PREFIX);
         }
     }
 
@@ -67,16 +68,17 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
         for (final PmAttribute attribute : dataset.getAttributes()) {
             // only attributes with labels should have a representation in OS because the data
             // are loaded into labels not attributes
-            generateAttributeDdl(dataset, ddlBuilder, attribute);
+            generateAttributeDdl(dataset, ddlBuilder, attribute, ATTRIBUTE_PREFIX);
         }
     }
 
-    private void generateAttributeDdl(PmDataset dataset, StringBuilder ddlBuilder, PmAttribute attribute) {
+    private void generateAttributeDdl(PmDataset dataset, StringBuilder ddlBuilder, PmAttribute attribute,
+                                      String typeprefix) {
         // first iteration to find attribute' label such as "label.person.pid"
         for (final PmLabel label : attribute.getLabels()) {
             if (isLabelRepresentingTheAttributeItself(attribute, label)) {
                 generateFieldDdl(ddlBuilder,
-                        ATTRIBUTE_PREFIX + shortenId(dataset, attribute),
+                        typeprefix + shortenId(dataset, attribute),
                         "VARCHAR(128)");
             }
         }

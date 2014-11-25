@@ -59,7 +59,7 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-connection-point.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
-                "  a__pid VARCHAR(128),\n" +
+                "  cp__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n");
@@ -71,7 +71,7 @@ public class ShortIdDdlGenerationStrategyTest {
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
                 "  f__car__velocity NUMERIC(10,2),\n" +
-                "  a__pid VARCHAR(128),\n" +
+                "  cp__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128),\n" +
                 "  d__birthdate DATE\n" +
@@ -83,7 +83,7 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-car-disconnected.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
-                "  a__pid VARCHAR(128),\n" +
+                "  cp__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n" +
@@ -99,7 +99,7 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-car-connected.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
-                "  a__pid VARCHAR(128),\n" +
+                "  cp__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n" +
@@ -117,7 +117,7 @@ public class ShortIdDdlGenerationStrategyTest {
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
                 "  f__car__velocity NUMERIC(10,2),\n" +
-                "  a__pid VARCHAR(128),\n" +
+                "  cp__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n");
@@ -129,9 +129,9 @@ public class ShortIdDdlGenerationStrategyTest {
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
                 "  f__car__velocity NUMERIC(10,2),\n" +
-                "  a__pid VARCHAR(128),\n" +
-                "  l__car__pid__name VARCHAR(128),\n" +
+                "  cp__pid VARCHAR(128),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
+                "  l__pid__car__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128)\n" +
                 ");\n");
     }
@@ -140,7 +140,7 @@ public class ShortIdDdlGenerationStrategyTest {
     public void goodSalesProjectModel() throws IOException {
         final String goodSalesDdl = idStrategy.generateDdl(readModel("goodsales.json"));
         System.out.println(goodSalesDdl);
-        assertThat(goodSalesDdl, is(IOUtils.toString(readResource("goodsales_id_strategy.sql"))));
+        assertThat(goodSalesDdl, is(IOUtils.toString(readResource("goodsales_short_id_strategy.sql"))));
     }
 
 
