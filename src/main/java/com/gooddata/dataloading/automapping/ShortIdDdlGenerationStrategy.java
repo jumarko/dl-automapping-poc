@@ -1,6 +1,7 @@
 package com.gooddata.dataloading.automapping;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static org.apache.commons.lang.StringUtils.substringAfter;
 import static org.apache.commons.lang.StringUtils.substringAfterLast;
 import static org.apache.commons.lang.Validate.notNull;
 
@@ -17,6 +18,8 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
 
     public static final String OS_SEPARATOR = "__";
     public static final String LDM_SEPARATOR = ".";
+    // escaped version to be used in regex
+    public static final String LDM_SEPARATOR_ESCAPED = "\\.";
 
     private static final String FACT_PREFIX = "f" + OS_SEPARATOR;
     private static final String LABEL_PREFIX = "l" + OS_SEPARATOR;
@@ -69,6 +72,7 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
         for (final PmAttribute attribute : dataset.getAttributes()) {
             // only attributes with labels should have a representation in OS because the data
             // are loaded into labels not attributes
+
             for (PmLabel label : attribute.getLabels()) {
                 ddlBuilder.append("  ")
                         .append(generateLabelColumnName(dataset, attribute, label))
@@ -117,7 +121,14 @@ public class ShortIdDdlGenerationStrategy implements DdlGenerationStrategy {
         if (fieldId.contains(LDM_SEPARATOR)) {
             if (parentDataset != null) {
                 // check if field id conforms to the dataset to which the field belongs
-                shortId = substringAfterLast(fieldId, LDM_SEPARATOR);
+                final String[] ldmIdParts = fieldId.split(LDM_SEPARATOR_ESCAPED);
+                if (shortenId(parentDataset).equals(ldmIdParts[1])) {
+                    shortId = substringAfterLast(fieldId, LDM_SEPARATOR);
+                } else {
+                    // field has been moved from other dataset (e.g. field "fact.bus.velocity" in "dataset.car"
+                    // -> the dataset prefix must be used to distinguish from "fact.car.velocity"
+                    shortId = substringAfter(fieldId, LDM_SEPARATOR);
+                }
             } else {
                 shortId = substringAfterLast(fieldId, LDM_SEPARATOR);
 

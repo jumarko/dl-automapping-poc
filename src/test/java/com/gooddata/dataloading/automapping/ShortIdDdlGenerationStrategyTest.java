@@ -72,7 +72,7 @@ public class ShortIdDdlGenerationStrategyTest {
         checkGeneratedDdl("person-date.json",
                 "CREATE TABLE person(\n" +
                 "  f__age NUMERIC(10,2),\n" +
-                "  f__velocity NUMERIC(10,2),\n" +
+                "  f__car__velocity NUMERIC(10,2),\n" +
                 "  l__pid__name VARCHAR(128),\n" +
                 "  l__pid__lastname VARCHAR(128),\n" +
                 "  l__pid VARCHAR(128),\n" +
